@@ -1,53 +1,38 @@
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Solution {
-    
-	public static void printLevelWise(BinaryTreeNode<Integer> root) {
-	    QueueUsingLL<BinaryTreeNode<Integer>> q = new QueueUsingLL<>();
-        q.enqueue(root);
-        while(!q.isEmpty())
+
+    public static int height(BinaryTreeNode<Integer> root)
+    {
+        if(root == null)
+            return 0;
+        return 1 + Math.max(height(root.left),height(root.right));
+    }
+	public static boolean checkBalanced(BinaryTreeNode<Integer> root){
+	    int left;
+        int right;
+        if(root == null)
         {
-            BinaryTreeNode<Integer> front = null;
-            try{
-                front = q.dequeue();
-            }
-            catch(QueueEmptyException e)
-            {
-                
-            }
-            System.out.print(front.data + ":");
-            if(front.left != null)
-            {
-                q.enqueue(front.left);
-                System.out.print("L:" + front.left.data + ",");
-            }
-            else
-            {
-                System.out.print("L:-1,");
-            }
-            if(front.right != null)
-            {
-                q.enqueue(front.right);
-                System.out.println("R:" + front.right.data );
-            }
-            else
-            {
-                System.out.println("R:-1");
-            }
-            
-            
+            return true;
         }
-		
+        left = height(root.left);
+        right = height(root.right);
+		if(Math.abs(left - right) <= 1 && checkBalanced(root.left) && checkBalanced(root.right))
+            return true;
+        return false;
 	}
+
+	
 	
 }
 
 
-class QueueEmptyException extends Exception {
+ class QueueEmptyException extends Exception {
 }
 
-class QueueUsingLL<T> {
+ class QueueUsingLL<T> {
 
 	class Node<T> {
 		T data;
@@ -112,21 +97,21 @@ class QueueUsingLL<T> {
 	}
 }
 
-class BinaryTreeNode<T> {
-	T data;
-	BinaryTreeNode<T> left;
-	BinaryTreeNode<T> right;
+ class BinaryTreeNode<T> {
+		T data;
+		BinaryTreeNode<T> left;
+		BinaryTreeNode<T> right;
 
-	public BinaryTreeNode(T data) {
-		this.data = data;
+		public BinaryTreeNode(T data) {
+			this.data = data;
+		}
 	}
-}
 
-public class Runner {
+public class Main {
 	static Scanner s = new Scanner(System.in);
 
 	public static BinaryTreeNode<Integer> takeInput(){
-		QueueUsingLL<BinaryTreeNode<Integer>>  pendingNodes = new QueueUsingLL<BinaryTreeNode<Integer>>(); // we can skip writing again inside <> after java version 1.7 
+		QueueUsingLL<BinaryTreeNode<Integer>>  pendingNodes = new QueueUsingLL<BinaryTreeNode<Integer>>(); // we can skip writing again inside <> after java version 1.7
 		Scanner s = new Scanner(System.in);
 		int rootData = s.nextInt();
 		BinaryTreeNode<Integer> root = new BinaryTreeNode<Integer>(rootData);
@@ -158,6 +143,7 @@ public class Runner {
 
 	public static void main(String[] args) {
 		BinaryTreeNode<Integer> root = takeInput();
-		Solution.printLevelWise(root);
+		System.out.println(Solution.checkBalanced(root));
 	}
+
 }
